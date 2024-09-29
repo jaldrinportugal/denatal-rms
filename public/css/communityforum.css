@@ -1,0 +1,101 @@
+body {
+    background-color: #f1eaead3;
+    font-family: Helvetica;
+}
+
+.header {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px 0px 8px 20px;
+    background-color: #4b9cd3;
+    color: #fff;
+    margin-bottom: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+}
+
+.forum-container, .form-container, .tweet-card, .comment-card {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.form-container h4, .tweet-header .username, .form-container h3 {
+    color: #007bff;
+}
+
+.tweet-card {
+    background-color: #fff; /* White card background */
+    border: 1px solid #e1e8ed;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease; /* Add transition for transform */
+}
+
+.tweet-card:hover {
+    transform: translateY(-5px); /* Move card up on hover */
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15); /* Enhance shadow on hover */
+}
+
+.tweet-header, .comment-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.tweet-header .username, .comment-header .username {
+    font-weight: bold;
+}
+
+.tweet-header .timestamp, .comment-header .timestamp {
+    color: #657786;
+}
+
+.tweet-content, .comment-content {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.tweet-actions, .comment-actions {
+    margin-top: 10px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-action {
+    font-size: 0.875rem;
+    border-radius: 50px;
+    padding: 5px 15px;
+    background-color: #f8f9fa; /* Light grey background */
+    color: #333; /* Dark grey text */
+    border: 1px solid #ccc;
+    transition: background-color 0.3s ease;
+    margin-left: 10px; /* Add margin between buttons */
+}
+
+.btn-action:hover {
+    background-color: #e9ecef; /* Light grey on hover */
+}
+
+.container {
+    max-width: 100%; /* Ensure container takes full width */
+    padding-right: 15px; /* Adjust for Bootstrap container padding */
+    padding-left: 15px; /* Adjust for Bootstrap container padding */
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.update-cancel-buttons {
+    display: flex;
+}
+
+.update-cancel-buttons .btn {
+    margin-left: 5px;
+}
