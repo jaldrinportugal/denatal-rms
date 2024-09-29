@@ -7,9 +7,9 @@
     <meta description="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ asset('fontawesome/css/all.min.css') }}">
 </head>
-<body class="min-h-screen bg-gray-200" style="margin: 0; padding: 0;">
+<body class="min-h-screen">
 
-    <div style="background-color: #4b9cd3; box-shadow: 0 2px 4px rgba(0,0,0,0.4);" class="header py-4 px-6 flex justify-between items-center text-white text-2xl font-semibold mb-10">
+    <div class="bg-[#4b9cd3;] shadow-[0_2px_4px_rgba(0,0,0,0.4)] py-4 px-6 flex justify-between items-center text-white text-2xl font-semibold mb-10">
         <h4><i class="fa-solid fa-calendar-days"></i> Update Calendar</h4>
     </div>
     

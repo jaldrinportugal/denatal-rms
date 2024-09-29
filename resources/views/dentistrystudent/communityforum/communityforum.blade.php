@@ -5,15 +5,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ asset('css/communityforum.css') }}">
     <link rel="stylesheet" href="{{ asset('fontawesome/css/all.min.css') }}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-<div class="header">
+
+    <div style="background-color: #4b9cd3; box-shadow: 0 2px 4px rgba(0,0,0,0.4);" class="header py-4 px-6 flex justify-between items-center text-white text-2xl font-semibold">
         <h4><i class="fa-regular fa-comments"></i> Community Forum</h4>
     </div>
-    <div class="container mt-4">
+
+    <div class="max-w-full px-4 mx-auto mt-4">
         @if(session('success'))
             <div class="alert alert-success">
                 {{ session('success') }}
@@ -25,39 +25,39 @@
             </div>
         @endif
 
-        <div class="form-container">
-            <h4>Post a New Topic</h4>
+        <div class="bg-white rounded-lg p-5 shadow-md mb-5">
+            <h4 class="text-blue-800 font-bold text-2xl mb-3">Post a New Topic</h4>
             <form action="{{ route('dentistrystudent.communityforum.store') }}" method="POST" id="postTopicForm">
                 @csrf
-                <div class="input-group mb-3">
-                    <textarea type="text" class="form-control" id="topic" name="topic" placeholder="Type here..." required></textarea>
-                    <div class="input-group-append">
-                        <button type="submit" class="btn btn-primary">Post Topic</button>
+                <div class="flex items-center mb-3">
+                    <textarea type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-500" id="topic" name="topic" placeholder="Type here..." required></textarea>
+                    <div class="flex-shrink-0">
+                        <button type="submit" class="px-4 py-5 rounded bg-blue-500 hover:bg-blue-700 text-white">Post Topic</button>
                     </div>
                 </div>
             </form>
         </div>
 
-        <div class="forum-container">
+        <div class="bg-white rounded-lg p-5 shadow-md mb-5">
             @foreach ($communityforums as $communityforum)
-                <div class="tweet-card">
-                    <div class="tweet-header">
+                <div class="bg-white rounded-lg p-4 mb-5 shadow-md transition-transform duration-300 ease-in-out hover:translate-y-[-5px] hover:shadow-lg">
+                    <div class="flex items-center justify-between mb-2.5">
                         <div>
-                            <span class="username">{{ $communityforum->user->name }}</span>
-                            <span class="timestamp">{{ $communityforum->created_at->setTimezone('Asia/Manila')->format('F d, Y h:i A') }}</span>
+                            <span class="text-blue-800 font-bold">{{ $communityforum->user->name }}</span>
+                            <span class="text-gray-500">{{ $communityforum->created_at->setTimezone('Asia/Manila')->format('F d, Y h:i A') }}</span>
                         </div>
                     </div>
-                    <div class="tweet-content">
+                    <div class="mt-2.5 text-sm leading-6">
                         <div class="editing-content" id="edit-form-{{ $communityforum->id }}" style="display: none;">
                             <form method="post" action="{{ route('dentistrystudent.updatedCommunityforum', $communityforum->id) }}">
                                 @csrf
                                 @method('PUT')
                                 <div class="mb-3">
-                                    <input type="text" class="form-control" id="topic" name="topic" placeholder="What's on your mind?" value="{{ old('topic', $communityforum->topic) }}" required>
+                                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-500" id="topic" name="topic" placeholder="What's on your mind?" value="{{ old('topic', $communityforum->topic) }}" required>
                                 </div>
-                                <div class="update-cancel-buttons">
-                                    <button type="submit" class="btn btn-primary">Update</button>
-                                    <button type="button" class="btn btn-info cancel-btn" onclick="cancelEdit({{ $communityforum->id }})">Cancel</button>
+                                <div class="flex mb-3">
+                                    <button type="submit" class="px-4 py-2 rounded bg-blue-500 hover:bg-blue-700 text-white">Update</button>
+                                    <button type="button" class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-gray-800 ml-2" onclick="cancelEdit('{{ $communityforum->id }}')">Cancel</button>
                                 </div>
                             </form>
                         </div>
@@ -65,51 +65,53 @@
                             <p>{{ $communityforum->topic }}</p>
                         </div>
                     </div>
-                    <!-- Add Comment Form -->
-                    <div class="add-comment-form">
-                        <form action="{{ route('dentistrystudent.addComment', $communityforum->id) }}" method="POST">
-                            @csrf
-                            <div class="input-group mb-3">
-                                <textarea class="form-control" id="comment" name="comment" placeholder="Add a comment..." required></textarea>
-                                <div class="input-group-append">
-                                    <button type="submit" class="btn btn-primary">Comment</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="tweet-actions">
-                        <button class="btn-action" onclick="toggleComments({{ $communityforum->id }})"><i class="fa-regular fa-message"></i> Comments</button>
+                    
+                    <div class="mt-2.5 flex justify-end">
+                        <button class="text-sm rounded-full px-3 py-1.5 bg-gray-100 text-gray-800 border border-gray-300 transition-colors duration-300 ease-in-out ml-2.5 hover:bg-gray-200" onclick="toggleComments('{{ $communityforum->id }}')"><i class="fa-regular fa-message"></i> Comments</button>
                         @if(Auth::id() === $communityforum->user_id || Auth::user()->is_dentistrystudent)
-                            <button class="btn-action" onclick="editTopic({{ $communityforum->id }})"><i class="fa-solid fa-pen"></i> Edit</button>
+                            <button class="text-sm rounded-full px-3 py-1.5 bg-gray-100 text-gray-800 border border-gray-300 transition-colors duration-300 ease-in-out ml-2.5 hover:bg-gray-200" onclick="editTopic('{{ $communityforum->id }}')"><i class="fa-solid fa-pen"></i> Edit</button>
                             <form method="post" action="{{ route('dentistrystudent.deleteCommunityforum', $communityforum->id) }}" class="d-inline">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn-action" onclick="return confirm('Are you sure you want to delete this post?')"><i class="fa-regular fa-trash-can"></i> Delete</button>
+                                <button type="submit" class="text-sm rounded-full px-3 py-1.5 bg-gray-100 text-gray-800 border border-gray-300 transition-colors duration-300 ease-in-out ml-2.5 hover:bg-gray-200" onclick="return confirm('Are you sure you want to delete this post?')"><i class="fa-regular fa-trash-can"></i> Delete</button>
                             </form>
                         @endif
                     </div>
 
                     <!-- Comments Section -->
-                    <div id="comments-section-{{ $communityforum->id }}" class="comments-section d-none">
-                        @foreach ($communityforum->comments as $comment)
-                            <div class="comment-card">
-                                <div class="comment-header">
-                                    <div>
-                                        <span class="username">{{ $comment->user->name }}</span>
-                                        <span class="timestamp">{{ $comment->created_at->setTimezone('Asia/Manila')->format('F d, Y h:i A') }}</span>
+                    <div id="comments-section-{{ $communityforum->id }}" class="comments-section hidden">
+                        <!-- Add Comment Form -->
+                        <div class="add-comment-form mt-5">
+                            <form action="{{ route('dentistrystudent.addComment', $communityforum->id) }}" method="POST">
+                                @csrf
+                                <div class="flex items-center mb-3">
+                                    <textarea class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-500" id="comment" name="comment" placeholder="Add a comment..." required></textarea>
+                                    <div class="flex-shrink-0">
+                                        <button type="submit" class="px-4 py-5 rounded bg-blue-500 hover:bg-blue-700 text-white">Comment</button>
                                     </div>
                                 </div>
-                                <div class="comment-content">
+                            </form>
+                        </div>
+
+                        @foreach ($communityforum->comments as $comment)
+                            <div class="bg-white rounded-lg p-5 shadow-md mb-5 transition-transform duration-300 ease-in-out hover:translate-y-[-5px] hover:shadow-lg">
+                                <div class="flex items-center justify-between mb-2.5">
+                                    <div>
+                                        <span class="text-blue-800 font-bold">{{ $comment->user->name }}</span>
+                                        <span class="text-gray-500">{{ $comment->created_at->setTimezone('Asia/Manila')->format('F d, Y h:i A') }}</span>
+                                    </div>
+                                </div>
+                                <div class="mt-2.5 text-sm leading-6">
                                     <div class="editing-content" id="edit-comment-form-{{ $comment->id }}" style="display: none;">
                                         <form method="post" action="{{ route('dentistrystudent.updatedComment', $comment->id) }}">
                                             @csrf
                                             @method('PUT')
                                             <div class="mb-3">
-                                                <input type="text" class="form-control" id="comment" name="comment" placeholder="Edit your comment" value="{{ old('comment', $comment->comment) }}" required>
+                                                <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-500" id="comment" name="comment" placeholder="Edit your comment" value="{{ old('comment', $comment->comment) }}" required>
                                             </div>
                                             <div class="update-cancel-buttons">
-                                                <button type="submit" class="btn btn-primary">Update</button>
-                                                <button type="button" class="btn btn-info cancel-btn" onclick="cancelEditComment({{ $comment->id }})">Cancel</button>
+                                                <button type="submit" class="px-4 py-2 rounded bg-blue-500 hover:bg-blue-700 text-white">Update</button>
+                                                <button type="button" class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-gray-800" onclick="cancelEditComment('{{ $comment->id }}')">Cancel</button>
                                             </div>
                                         </form>
                                     </div>
@@ -117,13 +119,13 @@
                                         <p>{{ $comment->comment }}</p>
                                     </div>
                                 </div>
-                                <div class="comment-actions">
+                                <div class="mt-2.5 flex justify-end">
                                     @if(Auth::id() === $comment->user_id || Auth::user()->is_dentistrystudent)
-                                        <button class="btn-action" onclick="editComment({{ $comment->id }})"><i class="fa-solid fa-pen"></i> Edit</button>
+                                        <button class="text-sm rounded-full px-3 py-1.5 bg-gray-100 text-gray-800 border border-gray-300 transition-colors duration-300 ease-in-out ml-2.5 hover:bg-gray-200" onclick="editComment('{{ $comment->id }}')"><i class="fa-solid fa-pen"></i> Edit</button>
                                         <form method="post" action="{{ route('dentistrystudent.deleteComment', $comment->id) }}" class="d-inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn-action" onclick="return confirm('Are you sure you want to delete this comment?')"><i class="fa-regular fa-trash-can"></i> Delete</button>
+                                            <button type="submit" class="text-sm rounded-full px-3 py-1.5 bg-gray-100 text-gray-800 border border-gray-300 transition-colors duration-300 ease-in-out ml-2.5 hover:bg-gray-200" onclick="return confirm('Are you sure you want to delete this comment?')"><i class="fa-regular fa-trash-can"></i> Delete</button>
                                         </form>
                                     @endif
                                 </div>
@@ -135,10 +137,11 @@
             {{ $communityforums->links() }}
         </div>
     </div>
+
     <script>
         function toggleComments(forumId) {
             var commentsSection = document.getElementById('comments-section-' + forumId);
-            commentsSection.classList.toggle('d-none');
+            commentsSection.classList.toggle('hidden');
         }
 
         function editTopic(forumId) {

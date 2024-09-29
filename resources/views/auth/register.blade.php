@@ -6,6 +6,7 @@
         <div class="mt-4">
             <x-input-label for="usertype" :value="__('User Type')" />
             <select id="usertype" name="usertype" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                <option value="" disabled selected>Select your User Type</option>
                 <option value="patient">{{ __('Patient') }}</option>
                 <option value="dentistrystudent">{{ __('Dentistry Student') }}</option>
             </select>
